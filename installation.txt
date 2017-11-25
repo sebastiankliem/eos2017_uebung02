@@ -1,0 +1,34 @@
+* Install necessary software
+    apt-get install -y pkg-config libxml2 libxml2-dev gcc g++ make automake autoconf binutils python-dev mercurial tcpdump gdb vim
+
+* Install ns3
+    mkdir repos
+    cd repos
+    hg clone http://code.nsnam.org/ns-3-dev
+    cd ns-3-dev
+    ./waf configure -d debug
+    ./waf
+    #./waf --regression
+
+* setup hostnames "ns3-fdnd-0" and "ns3-fdns-1"
+    * set in /etc/hostname
+    * set in /etc/hosts
+
+* create Host-only Adapter
+
+* on each VM:
+    * edit "/etc/network/interfaces" and add the following lines 
+      _before_ the similar delcaration of the primary network interface:
+      # The private network interface
+      auto enp0s8
+      iface enp0s8 inet dhcp
+    * dhclient enp0s8 after restart
+    * ifconfig enp0s8 promisc
+
+* on vm0:
+    sudo ./waf --run "fd-emu-udp-echo --server --stopTime=30 --deviceName=enp0s8"
+* on vm1:
+    sudo ./waf --run "fd-emu-udp-echo --client --stopTime=25 --deviceName=enp0s8"
+
+* then on both:
+    tcpdump -nn -tt -r fd-emu-udp-echo-0-1.pcap
