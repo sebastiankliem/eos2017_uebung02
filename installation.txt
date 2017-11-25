@@ -22,8 +22,14 @@
       # The private network interface
       auto enp0s8
       iface enp0s8 inet dhcp
-    * dhclient enp0s8 after restart
-    * ifconfig enp0s8 promisc
+      up ip link set enp0s8 promisc on
+              address         192.168.56.20
+              netmask         255.255.255.0
+              network         192.168.56.0
+              broadcast       192.168.56.255
+    * after restart: 
+        * dhclient enp0s8
+        * ifconfig enp0s8 promisc
 
 * on vm0:
     sudo ./waf --run "fd-emu-udp-echo --server --stopTime=30 --deviceName=enp0s8"
