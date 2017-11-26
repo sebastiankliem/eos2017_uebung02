@@ -14,13 +14,6 @@ vagrant up
 ```
 
 ## Running the simulation
-1. `vagrant ssh server` and in another tab `vagrant ssh client`
-2. both:
-    ```bash
-    cd repos/ns-3.27
-    sudo ./waf
-    ````
-3. server: `sudo ./waf --run "scratch/udp-echo --server"`  
-   client: `sudo ./waf --run "scratch/udp-echo --server"`
-
-4. both: `tcpdump -nn -r udp-echo-0-1.pcap`
+You need two shells:
+1. `vagrant ssh server -c "cd repos/ns-3.27;sudo ./waf --run \"scratch/udp-echo --server\"; tcpdump -tt -r udp-echo-0-1.pcap"`
+2. `vagrant ssh client -c "cd repos/ns-3.27;sudo ./waf --run \"scratch/udp-echo --client\"; tcpdump -tt -r udp-echo-0-1.pcap"`
